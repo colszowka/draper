@@ -2,7 +2,10 @@ module Draper
   class DecoratedEnumerableProxy
     include Enumerable
 
+    attr_reader :wrapped_collection
+
     delegate :as_json, :collect, :map, :each, :[], :all?, :include?, :first, :last, :shift, :to => :decorated_collection
+    delegate :count, :size, :length, :maximum, :minimum, :average, :to => :wrapped_collection
 
     def initialize(collection, klass, options = {})
       @wrapped_collection, @klass, @options = collection, klass, options

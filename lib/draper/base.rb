@@ -133,11 +133,11 @@ module Draper
     # @option options [Boolean] :infer If true, each model will be
     #   wrapped by its inferred decorator.
     def self.decorate(input, options = {})
-      if input.instance_of?(self)
+      if input.respond_to?(:count)
+        Draper::DecoratedEnumerableProxy.new(input, self, options)
+      elsif input.instance_of?(self)
         input.options = options unless options.empty?
         return input
-      elsif input.respond_to?(:each)
-        Draper::DecoratedEnumerableProxy.new(input, self, options)
       elsif options[:infer]
         input.decorator(options)
       else
